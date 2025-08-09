@@ -106,4 +106,36 @@ async def bananaboard(ctx):
     embed = discord.Embed(title="🍌 Banana Leaderboard:", description=description, color=0xffff00)
     await ctx.send(embed=embed)
 
+@bot.command()
+async def monkey(ctx):
+    stats = load_stats()
+    user_id = ctx.author.id
+    if not stats:
+        await ctx.send(f"We appreciate your intentions {ctx.author.mention}, but you have no bananas to donate.")
+        return
+
+    if stats[user_id] <= 0:
+        await ctx.send(f"We appreciate your intentions {ctx.author.mention}, but you have no bananas to donate.")
+        return
+
+    # Random bananas to donate (but not more than the user has)
+    donation = random.randint(1, max(1, stats[user_id]))
+    stats[user_id] -= donation
+
+    if stats[user_id] == 0:
+        del stats[user_id]
+    
+    save_stats(stats)
+
+    # Create embed
+    embed = discord.Embed(
+        title="🐒 Monkey Happiness!",
+        description=f"{ctx.author.mention} generously donated **{donation}** bananas, the monkeys are happy!! 🍌",
+        color=discord.Color.gold()
+    )
+    embed.set_image(url="https://i.ytimg.com/vi/ljUIOZXXHbA/maxresdefault.jpg")
+
+    await ctx.send(embed=embed)
+
 bot.run(os.getenv("BOT_TOKEN"))
+
