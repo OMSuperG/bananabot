@@ -137,5 +137,29 @@ async def monkey(ctx):
 
     await ctx.send(embed=embed)
 
+@bot.command()
+async def villains(ctx):
+    villains_list = [
+        "🍴 Secondaryfork",
+        "🌳 indie",
+        "🦭 sumdood",
+        "🦦 Stoatly",
+        "🦨 McSkush",
+        "🐱 SmokeBot",
+        "🚗 Dyno",
+        "💣🦭 BOOMSEAL",
+        "🤖 AstroBot"
+    ]
+    
+    random.shuffle(villains_list)
+    
+    embed = discord.Embed(
+        title="😈 List of Villains",
+        description="\n".join(villains_list),
+        color=discord.Color.red()
+    )
+    await ctx.send(embed=embed)
+    
 bot.run(os.getenv("BOT_TOKEN"))
+
 
