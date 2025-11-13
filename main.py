@@ -137,5 +137,37 @@ async def monkey(ctx):
 
     await ctx.send(embed=embed)
 
+@bot.command()
+async def bananamail(ctx):
+    stats = load_stats()
+    user_id = ctx.author.id
+    
+    if not stats:
+        await ctx.send(f"{ctx.author.mention}, you have no bananas to give the mailmonkey. He refused your command.")
+        return
+
+    if stats[user_id] <= 0:
+        await ctx.send(f"{ctx.author.mention}, you have no bananas to give the mailmonkey. He refused your command.")
+        return
+
+    donation = random.randint(1, max(1, stats[user_id]))
+    stats[user_id] -= donation
+
+    if stats[user_id] == 0:
+        del stats[user_id]
+
+    save_stats(stats)
+
+    # Send mail here :)
+
+    embed = discord.Embed(
+        title="🍌📬 Bananamail Sent!",
+        description=f"Your bananamail was successfully sent! The mailmokey charged you **{donation} bananas**.",
+        color=discord.Color.yellow()
+    )
+    embed.set_image(url="https://i.postimg.cc/q7H03g3Q/Chat-GPT-Image-Nov-13-2025-06-46-42-PM.png")
+    await ctx.send(embed=embed)
+
 bot.run(os.getenv("BOT_TOKEN"))
+
 
